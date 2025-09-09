@@ -23,12 +23,42 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       child: MaterialApp(
-        title: "Poek Buddy",
+        title: "Poke Buddy",
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightGreen),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.redAccent,
+            brightness: Brightness.light,
+          ),
+          cardTheme: const CardThemeData(
+            elevation: 2,
+            shadowColor: Colors.black12,
+            margin: EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+            ),
+          ),
+          appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
           useMaterial3: true,
           textTheme: GoogleFonts.quattrocentoSansTextTheme(),
         ),
+        darkTheme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.redAccent,
+            brightness: Brightness.dark,
+          ),
+          cardTheme: const CardThemeData(
+            elevation: 2,
+            shadowColor: Colors.black26,
+            margin: EdgeInsets.all(8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+            ),
+          ),
+          appBarTheme: const AppBarTheme(centerTitle: true, elevation: 0),
+          useMaterial3: true,
+          textTheme: GoogleFonts.quattrocentoSansTextTheme(),
+        ),
+        themeMode: ThemeMode.system,
         debugShowCheckedModeBanner: false,
         home: const HomeScreen(),
       ),

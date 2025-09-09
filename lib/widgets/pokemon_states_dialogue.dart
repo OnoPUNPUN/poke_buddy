@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../Providers/pokemon_data_providers.dart';
@@ -13,27 +12,62 @@ class PokemonStatesCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pokemon = ref.watch(pokemonDataProvider(pokemonUrl));
     return AlertDialog(
-      title: Text("Pokemon States"),
+      title: const Text("Pokémon Stats"),
       content: pokemon.when(
         data: (data) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-
-            children:
-                (data?.stats
-                    ?.map(
-                      (s) =>
-                          Text("${s.stat?.name?.toUpperCase()}: ${s.baseStat}"),
-                    )
-                    .toList() ??
-                []),
+          final stats = data?.stats ?? [];
+          return SizedBox(
+            width: MediaQuery.sizeOf(context).width * 0.7,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: stats.map((s) {
+                  final name = (s.stat?.name ?? "").toUpperCase();
+                  final value = s.baseStat ?? 0;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 4),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: LinearProgressIndicator(
+                            value: (value / 200).clamp(0.0, 1.0),
+                            minHeight: 10,
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(value.toString()),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
           );
         },
         error: (error, stackTrace) => Text(error.toString()),
         loading: () {
-          return CircularProgressIndicator();
+          return const SizedBox(
+            height: 64,
+            width: 64,
+            child: Center(child: CircularProgressIndicator()),
+          );
         },
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text("Close"),
+        ),
+      ],
     );
   }
 }

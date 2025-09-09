@@ -17,7 +17,7 @@ class DatabaseService {
   Future<List<String>?> getList(String key) async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<String>? result = await prefs.getStringList(key);
+      List<String>? result = prefs.getStringList(key);
       return result;
     } catch (e) {
       print(e);

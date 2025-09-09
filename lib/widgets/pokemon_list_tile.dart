@@ -36,33 +36,56 @@ class PokemonListTile extends ConsumerWidget {
       enabled: isLoading,
       child: GestureDetector(
         onTap: () {
-          if(!isLoading) {
-            showDialog(context: context, builder: (_) {
-              return PokemonStatesCard(pokemonUrl: pokemonURL,);
-            });
+          if (!isLoading) {
+            showDialog(
+              context: context,
+              builder: (_) {
+                return PokemonStatesCard(pokemonUrl: pokemonURL);
+              },
+            );
           }
         },
-        child: ListTile(
-          leading: pokemon != null
-              ? CircleAvatar(
-                  backgroundImage: NetworkImage(pokemon.sprites!.frontDefault!),
-                )
-              : const CircleAvatar(),
-          title: Text(pokemon != null ? pokemon.name!.toUpperCase() : "Loading"),
-          subtitle: Text("Has ${pokemon?.moves?.length.toString() ?? 0} moves"),
-          trailing: IconButton(
-            onPressed: () {
-              if (_favoritePokemonList.contains(pokemonURL)) {
-                _favoritePokemonProvider.removeFavPokemon(pokemonURL);
-              } else {
-                _favoritePokemonProvider.addFavPokemon(pokemonURL);
-              }
-            },
-            icon: Icon(
-              _favoritePokemonList.contains(pokemonURL)
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-              color: Colors.red,
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 10,
+            ),
+            leading: pokemon != null
+                ? CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      pokemon.sprites!.frontDefault!,
+                    ),
+                  )
+                : const CircleAvatar(),
+            title: Text(
+              pokemon != null ? pokemon.name!.toUpperCase() : "Loading",
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            subtitle: Text(
+              "Has ${pokemon?.moves?.length.toString() ?? 0} moves",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            trailing: IconButton(
+              onPressed: () {
+                if (_favoritePokemonList.contains(pokemonURL)) {
+                  _favoritePokemonProvider.removeFavPokemon(pokemonURL);
+                } else {
+                  _favoritePokemonProvider.addFavPokemon(pokemonURL);
+                }
+              },
+              icon: Icon(
+                _favoritePokemonList.contains(pokemonURL)
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                color: Colors.red,
+              ),
             ),
           ),
         ),

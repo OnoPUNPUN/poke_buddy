@@ -42,4 +42,9 @@ class HomePageController extends StateNotifier<HomePageData> {
       }
     }
   }
+
+  Future<void> refresh() async {
+    state = HomePageData.initial();
+    await loadData();
+  }
 }

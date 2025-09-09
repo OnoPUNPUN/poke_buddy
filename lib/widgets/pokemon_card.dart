@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:poke_buddy/Providers/pokemon_data_providers.dart';
 import 'package:poke_buddy/widgets/pokemon_states_dialogue.dart';
@@ -33,10 +31,13 @@ class PokemonCard extends ConsumerWidget {
   Widget _card(BuildContext context, bool isLoading, Pokemon? pokemon) {
     return GestureDetector(
       onTap: () {
-        if(!isLoading) {
-          showDialog(context: context, builder: (_) {
-            return PokemonStatesCard(pokemonUrl: pokemonUrl,);
-          });
+        if (!isLoading) {
+          showDialog(
+            context: context,
+            builder: (_) {
+              return PokemonStatesCard(pokemonUrl: pokemonUrl);
+            },
+          );
         }
       },
       child: Skeletonizer(
@@ -52,7 +53,14 @@ class PokemonCard extends ConsumerWidget {
             vertical: MediaQuery.sizeOf(context).height * 0.01,
           ),
           decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context).colorScheme.primary,
+                Theme.of(context).colorScheme.secondary,
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
               BoxShadow(color: Colors.black26, spreadRadius: 2, blurRadius: 10),
@@ -66,15 +74,21 @@ class PokemonCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    pokemon?.name?.toUpperCase() ?? "Pokmon",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      pokemon?.name?.toUpperCase() ?? "Pokmon",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Text(
                     "#${pokemon?.id?.toString()}",
+                    softWrap: false,
+                    overflow: TextOverflow.fade,
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -94,15 +108,23 @@ class PokemonCard extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    "${pokemon?.moves?.length} Moves",
-                    style: TextStyle(color: Colors.white),
+                  Expanded(
+                    child: Text(
+                      "${pokemon?.moves?.length ?? 0} Moves",
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
                       _favoritePokemonProvider.removeFavPokemon(pokemonUrl);
                     },
-                    child: Icon(Icons.favorite, color: Colors.red),
+                    child: const CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Colors.white24,
+                      child: Icon(Icons.favorite, color: Colors.red),
+                    ),
                   ),
                 ],
               ),
