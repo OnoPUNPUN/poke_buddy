@@ -8,11 +8,16 @@ import '../Providers/pokemon_data_providers.dart';
 class PokemonListTile extends ConsumerWidget {
   final String pokemonURL;
 
-  const PokemonListTile({super.key, required this.pokemonURL});
+  PokemonListTile({super.key, required this.pokemonURL});
+
+  late FavoritePokemonProvider _favoritePokemonProvider;
+  late List<String> _favoritePokemonList;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pokemon = ref.watch(pokemonDataProvider(pokemonURL));
+    _favoritePokemonProvider = ref.watch(favoritePokemonProvider.notifier);
+    _favoritePokemonList = ref.watch(favoritePokemonProvider);
 
     return pokemon.when(
       data: (data) {
@@ -36,7 +41,21 @@ class PokemonListTile extends ConsumerWidget {
             : const CircleAvatar(),
         title: Text(pokemon != null ? pokemon.name!.toUpperCase() : "Loading"),
         subtitle: Text("Has ${pokemon?.moves?.length.toString() ?? 0} moves"),
-        trailing: IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
+        trailing: IconButton(
+          onPressed: () {
+            if (_favoritePokemonList.contains(pokemonURL)) {
+              _favoritePokemonProvider.removeFavPokemon(pokemonURL);
+            } else {
+              _favoritePokemonProvider.addFavPokemon(pokemonURL);
+            }
+          },
+          icon: Icon(
+            _favoritePokemonList.contains(pokemonURL)
+                ? Icons.favorite
+                : Icons.favorite_border,
+            color: Colors.red,
+          ),
+        ),
       ),
     );
   }
