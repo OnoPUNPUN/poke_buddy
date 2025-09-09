@@ -11,6 +11,7 @@ class DatabaseService {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<List<String>?> getList(String key) async {

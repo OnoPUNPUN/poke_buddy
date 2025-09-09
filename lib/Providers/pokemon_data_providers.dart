@@ -34,7 +34,10 @@ class FavoritePokemonProvider extends StateNotifier<List<String>> {
     _setUp();
   }
 
-  Future<void> _setUp() async {}
+  Future<void> _setUp() async {
+    List<String>? result = await _databaseService.getList(FAVORITE_POKEMON_KEY);
+    state = result ?? [];
+  }
 
   void addFavPokemon(String url) {
     state = [...state, url];

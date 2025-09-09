@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:poke_buddy/Providers/pokemon_data_providers.dart';
 import 'package:poke_buddy/controllers/home_page_controller.dart';
 import 'package:poke_buddy/models/page_data.dart';
 import 'package:poke_buddy/models/pokemon.dart';
+import 'package:poke_buddy/widgets/pokemon_card.dart';
 import 'package:poke_buddy/widgets/pokemon_list_tile.dart';
 
 /*Providers from Riverpod*/
@@ -23,6 +25,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final ScrollController _allPokemonScrollController = ScrollController();
   late HomePageController _homePageController;
   late HomePageData _homePageData;
+
+  late List<String> _favoritePokemonList;
 
   @override
   void initState() {
@@ -49,6 +53,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     _homePageController = ref.watch(homePageControllerProvider.notifier);
     _homePageData = ref.watch(homePageControllerProvider);
+    _favoritePokemonList = ref.watch(favoritePokemonProvider);
 
     return Scaffold(body: _buildUI(context));
   }
@@ -64,9 +69,52 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [_allPokemon(context, _homePageData)],
+            children: [
+              _favoritePokemon(context),
+              _allPokemon(context, _homePageData),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _favoritePokemon(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.sizeOf(context).width,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text("Favorite Pokemons", style: TextStyle(fontSize: 25)),
+          SizedBox(
+            height: MediaQuery.sizeOf(context).height * 0.50,
+            width: MediaQuery.sizeOf(context).width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (_favoritePokemonList.isNotEmpty)
+                  SizedBox(
+                    height: MediaQuery.sizeOf(context).height * 0.48,
+                    child: GridView.builder(
+                      scrollDirection: Axis.horizontal,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                      ),
+                      itemCount: _favoritePokemonList.length,
+                      itemBuilder: (context, index) {
+                        String pokemon = _favoritePokemonList[index];
+                        return PokemonCard(pokemonUrl: pokemon);
+                      },
+                    ),
+                  ),
+                if (_favoritePokemonList.isEmpty)
+                  const Text("No Favorite Pokemon"),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
