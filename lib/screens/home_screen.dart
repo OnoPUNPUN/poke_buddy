@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:poke_buddy/Providers/pokemon_data_providers.dart';
 import 'package:poke_buddy/controllers/home_page_controller.dart';
 import 'package:poke_buddy/models/page_data.dart';
-import 'package:poke_buddy/models/pokemon.dart';
 import 'package:poke_buddy/widgets/pokemon_card.dart';
 import 'package:poke_buddy/widgets/pokemon_list_tile.dart';
 import 'package:poke_buddy/widgets/pokemon_grid_card.dart';
@@ -197,7 +196,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               height: fullSize ? MediaQuery.sizeOf(context).height * 0.50 : 220,
               width: MediaQuery.sizeOf(context).width,
               child: GridView.builder(
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                 ),
