@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:poke_buddy/screens/home_screen.dart';
+import 'package:poke_buddy/services/database_service.dart';
 import 'package:poke_buddy/services/http_services.dart';
 
 void main() async {
@@ -12,6 +13,7 @@ void main() async {
 
 Future<void> _setUpServices() async {
   GetIt.instance.registerSingleton<HttpServices>(HttpServices());
+  GetIt.instance.registerSingleton<DatabaseService>(DatabaseService());
 }
 
 class MyApp extends StatelessWidget {
