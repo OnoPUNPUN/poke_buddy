@@ -45,7 +45,7 @@ A beautiful and modern Flutter Pokédex application built with Riverpod for stat
 1. **Clone the repository**
    ```bash
    git clone https://github.com/OnoPUNPUN/poke_buddy.git
-   cd pokemon-app
+   cd poke_buddy
    ```
 
 2. **Install dependencies**
